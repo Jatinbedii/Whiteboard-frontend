@@ -2,12 +2,13 @@
 import useDraw from "@/hooks/useDraw";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-function page() {
-  const name = "name";
-  const room = "room";
+function page({ params }) {
+  const name = params.name;
+  const room = params.roomid;
   const { canvasRef, onMouseDown, clearBoard } = useDraw(drawline);
   const [colorforline, setcolor] = useState("#000");
   const [socketstate, setsocketstate] = useState();
+  const [chat, setchat] = useState([]);
   function clearhandler() {
     clearBoard();
     socketstate.emit("clear", { room, name });
@@ -16,9 +17,10 @@ function page() {
     const socket = io("http://localhost:3001");
     setsocketstate(socket);
     socket.emit("joinroom", { name, room });
-    socket.on("userjoined", ({ name, socketid }) => {
+    socket.on("userjoined", (props) => {
+      setchat((prevchat) => [...prevchat, `${props.name} Joined the room`]);
       const data = canvasRef.current?.toDataURL();
-      socket.emit("canvasdata", { socketid, data });
+      socket.emit("canvasdata", { socketid: props.socketid, data });
     });
 
     socket.on("canvasdata", ({ data }) => {
@@ -117,6 +119,12 @@ function page() {
         onChange={(e) => setcolor(e.target.value)}
       />
       <button onClick={clearhandler}>Clear</button>
+
+      <div>
+        {chat.map((data) => {
+          return <div>{data}</div>;
+        })}
+      </div>
     </div>
   );
 }
