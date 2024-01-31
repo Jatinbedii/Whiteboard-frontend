@@ -6,9 +6,15 @@ function page({ params }) {
   const name = params.name;
   const room = params.roomid;
   const { canvasRef, onMouseDown, clearBoard } = useDraw(drawline);
+  const [chatinput, setchatinput] = useState();
   const [colorforline, setcolor] = useState("#000");
   const [socketstate, setsocketstate] = useState();
   const [chat, setchat] = useState([]);
+  function sendmessagehandler(e) {
+    e.preventDefault();
+
+    socketstate.emit("message", { name, chatinput, room });
+  }
   function clearhandler() {
     clearBoard();
     socketstate.emit("clear", { room, name });
@@ -17,8 +23,14 @@ function page({ params }) {
     const socket = io("http://localhost:3001");
     setsocketstate(socket);
     socket.emit("joinroom", { name, room });
+    socket.on("message", ({ name, message }) => {
+      setchat((prevchat) => [...prevchat, { by: name, message: message }]);
+    });
     socket.on("userjoined", (props) => {
-      setchat((prevchat) => [...prevchat, `${props.name} Joined the room`]);
+      setchat((prevchat) => [
+        ...prevchat,
+        { message: `${props.name} Joined the room`, by: "admin" },
+      ]);
       const data = canvasRef.current?.toDataURL();
       socket.emit("canvasdata", { socketid: props.socketid, data });
     });
@@ -122,8 +134,15 @@ function page({ params }) {
 
       <div>
         {chat.map((data) => {
-          return <div>{data}</div>;
+          return <div>{data.by + ":" + data.message}</div>;
         })}
+      </div>
+      <div>
+        <input
+          value={chatinput}
+          onChange={(e) => setchatinput(e.target.value)}
+        />
+        <button onClick={sendmessagehandler}>Send</button>
       </div>
     </div>
   );
