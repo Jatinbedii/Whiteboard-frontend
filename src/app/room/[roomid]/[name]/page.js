@@ -16,7 +16,18 @@ function page() {
     const socket = io("http://localhost:3001");
     setsocketstate(socket);
     socket.emit("joinroom", { name, room });
+    socket.on("userjoined", ({ name, socketid }) => {
+      const data = canvasRef.current?.toDataURL();
+      socket.emit("canvasdata", { socketid, data });
+    });
 
+    socket.on("canvasdata", ({ data }) => {
+      const img = new Image();
+      img.src = data;
+      img.onload = () => {
+        canvasRef.current?.getContext("2d").drawImage(img, 0, 0);
+      };
+    });
     socket.on("drawline", ({ prevpoint, currentpoint, color }) => {
       const ctx = canvasRef.current?.getContext("2d");
 
@@ -54,6 +65,9 @@ function page() {
 
     return () => {
       socket.off("drawline");
+      socket.off("clear");
+      socket.off("canvasdata");
+      socket.off("userjoined");
     };
   }, []);
 
