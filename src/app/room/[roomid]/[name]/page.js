@@ -20,7 +20,7 @@ function page({ params }) {
     socketstate.emit("clear", { room, name });
   }
   useEffect(() => {
-    const socket = io("http://localhost:3001");
+    const socket = io(process.env.NEXT_PUBLIC_BACKEND);
     setsocketstate(socket);
     socket.emit("joinroom", { name, room });
     socket.on("message", ({ name, message }) => {
