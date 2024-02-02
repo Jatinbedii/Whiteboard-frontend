@@ -1,8 +1,9 @@
 "use client";
 import useDraw from "@/hooks/useDraw";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 function page({ params }) {
+  const chatContainerRef = useRef(null);
   const name = params.name;
   const room = params.roomid;
   const { canvasRef, onMouseDown, clearBoard } = useDraw(drawline);
@@ -12,7 +13,7 @@ function page({ params }) {
   const [chat, setchat] = useState([]);
   function sendmessagehandler(e) {
     e.preventDefault();
-    setchat((prevchat) => [...prevchat, { message: chatinput, by: name }]);
+    setchat((prevchat) => [...prevchat, { message: chatinput, by: "You" }]);
     socketstate.emit("message", { name, chatinput, room });
     setchatinput("");
   }
@@ -36,7 +37,7 @@ function page({ params }) {
     socket.on("userjoined", (props) => {
       setchat((prevchat) => [
         ...prevchat,
-        { message: `${props.name} Joined the room`, by: "admin" },
+        { message: `${props.name} Joined the room`, by: "" },
       ]);
       const data = canvasRef.current?.toDataURL();
       socket.emit("canvasdata", { socketid: props.socketid, data });
@@ -96,6 +97,11 @@ function page({ params }) {
     };
   }, []);
 
+  useEffect(() => {
+    // Scroll to the bottom of the chat container whenever the component updates
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  }, [chat]);
+
   function drawline(ctx, currentpoint, prevpoint) {
     const color = colorforline;
     const linewidth = 3;
@@ -126,9 +132,12 @@ function page({ params }) {
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-blue-500">
       <div className="w-full text-center bg-blue-500 text-3xl md:text-4xl">
         ROOM - {room}
+      </div>
+      <div className="w-full text-center bg-blue-500 text-1xl md:text-2xl">
+        NAME - {name}
       </div>
       <div className="w-full flex justify-around bg-blue-500 pt-3">
         <canvas
@@ -139,7 +148,7 @@ function page({ params }) {
           onMouseDown={onMouseDown}
         />
       </div>
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center bg-blue-500">
         <input
           className="m-2"
           type="color"
@@ -153,18 +162,42 @@ function page({ params }) {
           Clear
         </button>
       </div>
-
-      <div>
-        {chat.map((data) => {
-          return <div>{data.by + ":" + data.message}</div>;
-        })}
-      </div>
-      <div>
-        <input
-          value={chatinput}
-          onChange={(e) => setchatinput(e.target.value)}
-        />
-        <button onClick={sendmessagehandler}>Send</button>
+      <div className="w-full flex justify-center bg-blue-500">
+        <div className="bg-blue-700 rounded-lg p-1">
+          <div className="max-h-[200px] overflow-y-auto" ref={chatContainerRef}>
+            {chat.map((data) => {
+              if (data.by) {
+                return (
+                  <div className="text-white">
+                    <span className="text-white font-bold">
+                      {data.by + " : "}
+                    </span>
+                    {data.message}
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="w-full bg-blue-900 text-white rounded-md pl-1 mt-1 mb-1">
+                    {data.message}
+                  </div>
+                );
+              }
+            })}
+          </div>
+          <div>
+            <input
+              value={chatinput}
+              onChange={(e) => setchatinput(e.target.value)}
+              className="rounded-lg m-1 p-1"
+            />
+            <button
+              className="p-1 m-1 text-white bg-blue-950 rounded-lg"
+              onClick={sendmessagehandler}
+            >
+              Send
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
