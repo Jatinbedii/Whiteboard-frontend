@@ -18,21 +18,25 @@ function JoinRoom() {
   return (
     <div className="max-w-fit p-5 bg-blue-700 rounded-md m-2">
       <div className="flex flex-col gap-3 ">
-        <div className="text-white font-medium text-center">
+        <div className="text-white font-medium text-center md:text-2xl">
           Create a new Room or Join existing Room
         </div>
-        <input
-          className="rounded"
-          placeholder="Enter Room Name"
-          value={room}
-          onChange={(e) => setroom(e.target.value)}
-        />
-        <input
-          className="rounded"
-          placeholder="Enter Your Name"
-          value={name}
-          onChange={(e) => setname(e.target.value)}
-        />
+        <div className="w-full text-center">
+          <input
+            className="rounded max-w-[300px] text-center"
+            placeholder="Enter Room Name"
+            value={room}
+            onChange={(e) => setroom(e.target.value)}
+          />
+        </div>
+        <div className="w-full text-center">
+          <input
+            className="rounded max-w-[300px] text-center"
+            placeholder="Enter Your Name"
+            value={name}
+            onChange={(e) => setname(e.target.value)}
+          />
+        </div>
         <div className="bg-red-600 pl-2 text-white rounded-md">{error}</div>
         <div className="w-full text-center">
           <button

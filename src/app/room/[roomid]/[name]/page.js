@@ -12,12 +12,17 @@ function page({ params }) {
   const [chat, setchat] = useState([]);
   function sendmessagehandler(e) {
     e.preventDefault();
-
+    setchat((prevchat) => [...prevchat, { message: chatinput, by: name }]);
     socketstate.emit("message", { name, chatinput, room });
+    setchatinput("");
   }
   function clearhandler() {
     clearBoard();
     socketstate.emit("clear", { room, name });
+    setchat((prevchat) => [
+      ...prevchat,
+      { message: "You cleared the Board", by: "" },
+    ]);
   }
   useEffect(() => {
     const socket = io(process.env.NEXT_PUBLIC_BACKEND, {
@@ -77,6 +82,10 @@ function page({ params }) {
 
     socket.on("clear", ({ name }) => {
       clearBoard();
+      setchat((prevchat) => [
+        ...prevchat,
+        { message: `${name} cleared the Board`, by: "" },
+      ]);
     });
 
     return () => {
@@ -118,21 +127,32 @@ function page({ params }) {
 
   return (
     <div>
-      <div className="w-full flex justify-around">
+      <div className="w-full text-center bg-blue-500 text-3xl md:text-4xl">
+        ROOM - {room}
+      </div>
+      <div className="w-full flex justify-around bg-blue-500 pt-3">
         <canvas
           ref={canvasRef}
           height={500}
           width={500}
-          className=" border border-black rounded-lg"
+          className="bg-white border border-black rounded-lg"
           onMouseDown={onMouseDown}
         />
       </div>
-      <input
-        type="color"
-        id="colorpicker"
-        onChange={(e) => setcolor(e.target.value)}
-      />
-      <button onClick={clearhandler}>Clear</button>
+      <div className="w-full flex justify-center">
+        <input
+          className="m-2"
+          type="color"
+          id="colorpicker"
+          onChange={(e) => setcolor(e.target.value)}
+        />
+        <button
+          className="m-2 bg-blue-950 text-white rounded-md p-1"
+          onClick={clearhandler}
+        >
+          Clear
+        </button>
+      </div>
 
       <div>
         {chat.map((data) => {
