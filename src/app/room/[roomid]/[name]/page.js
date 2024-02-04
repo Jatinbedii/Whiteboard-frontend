@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import { IoHomeSharp } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
 import { FaEraser } from "react-icons/fa";
+import { MdSend } from "react-icons/md";
 function page({ params }) {
   const { toast } = useToast();
   const chatContainerRef = useRef(null);
@@ -222,14 +223,15 @@ function page({ params }) {
                 className="rounded-lg m-1 p-1"
               />
               <button
-                className="p-1 m-1 text-white bg-blue-950 rounded-lg "
+                className="p-2 m-1 text-white bg-blue-950 rounded-md "
                 onClick={sendmessagehandler}
               >
-                Send
+                <MdSend />
               </button>
             </div>
           </div>
         </div>
+        <div className="w-full h-[10px] bg-blue-500"></div>
       </div>
     </>
   );
