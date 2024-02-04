@@ -4,6 +4,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+import { IoHomeSharp } from "react-icons/io5";
+import { IoPersonSharp } from "react-icons/io5";
+import { FaEraser } from "react-icons/fa";
 function page({ params }) {
   const { toast } = useToast();
   const chatContainerRef = useRef(null);
@@ -106,7 +109,6 @@ function page({ params }) {
   }, []);
 
   useEffect(() => {
-    // Scroll to the bottom of the chat container whenever the component updates
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }, [chat]);
 
@@ -143,14 +145,28 @@ function page({ params }) {
     <>
       <Toaster />
       <div className="min-h-screen bg-blue-500">
-        <div className="w-full text-center bg-blue-500 text-3xl md:text-4xl">
-          ROOM - {room}
+        <div className="bg-blue-950">
+          <h1 className="text-white pt-2 text-3xl text-center md:text-4xl md:pt-4 pb-1">
+            W H I T E B O A R D
+          </h1>
         </div>
-        <div className="w-full text-center bg-blue-500 text-1xl md:text-2xl">
-          NAME - {name}
+        <div className="w-full min-h-[60px] bg-blue-950 rounded-b-full">
+          <div className="w-full flex justify-center">
+            <div className="bg-blue-500 flex flex-row gap-2 pr-5 pl-5 rounded-full mb-2">
+              <div className="bg-blue-500 text-black mt-2 font-semibold rounded-full text-center p-1">
+                <IoHomeSharp />
+                {room}
+              </div>
+              <div className="bg-blue-500 text-black mt-2 rounded-full text-center p-1 font-semibold">
+                <IoPersonSharp />
+                {name}
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="w-full flex justify-around bg-blue-500 pt-3">
-          <div className="overflow-auto max-w-full max-h-screen">
+          <div className="overflow-auto max-w-full max-h-screen p-1 bg-black rounded-lg">
             <canvas
               ref={canvasRef}
               height={500}
@@ -162,22 +178,22 @@ function page({ params }) {
         </div>
         <div className="w-full flex justify-center bg-blue-500">
           <input
-            className="m-2"
+            className="m-2 mt-3 border-2 border-gray-700"
             type="color"
             id="colorpicker"
             onChange={(e) => setcolor(e.target.value)}
           />
           <button
-            className="m-2 bg-blue-950 text-white rounded-md p-1"
+            className="m-2 bg-red-600 border-black border-2  text-white rounded-md p-1 flex flex-row gap-2 hover:bg-red-900"
             onClick={clearhandler}
           >
-            Clear
+            <FaEraser /> Clear
           </button>
         </div>
-        <div className="w-full flex justify-center bg-blue-500">
+        <div className="w-full flex justify-center ">
           <div className="bg-blue-700 rounded-lg p-1">
             <div
-              className="max-h-[200px] overflow-y-auto"
+              className="max-h-[200px] min-h-[200px] overflow-y-auto"
               ref={chatContainerRef}
             >
               {chat.map((data) => {
@@ -206,7 +222,7 @@ function page({ params }) {
                 className="rounded-lg m-1 p-1"
               />
               <button
-                className="p-1 m-1 text-white bg-blue-950 rounded-lg"
+                className="p-1 m-1 text-white bg-blue-950 rounded-lg "
                 onClick={sendmessagehandler}
               >
                 Send

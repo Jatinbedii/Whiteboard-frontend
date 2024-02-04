@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+
+import { FcNext } from "react-icons/fc";
 function JoinRoom() {
   const [loading, setloading] = useState(false);
   const [room, setroom] = useState("");
@@ -66,7 +68,7 @@ function JoinRoom() {
               onClick={joinhandler}
               className="text-white font-semibold bg-blue-950 rounded-xl pt-1 pb-1 pl-5 pr-5"
             >
-              Join
+              <FcNext />
             </button>
           )}
         </div>
