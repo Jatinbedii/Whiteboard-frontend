@@ -1,8 +1,11 @@
 "use client";
 import useDraw from "@/hooks/useDraw";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 function page({ params }) {
+  const { toast } = useToast();
   const chatContainerRef = useRef(null);
   const name = params.name;
   const room = params.roomid;
@@ -26,6 +29,11 @@ function page({ params }) {
     ]);
   }
   useEffect(() => {
+    toast({
+      title: "Use a mouse",
+      description:
+        "Drawing can be done through PC only. Not touch screen Phones.",
+    });
     const socket = io(process.env.NEXT_PUBLIC_BACKEND, {
       transports: ["websocket", "polling", "flashsocket"],
     });
@@ -199,6 +207,7 @@ function page({ params }) {
               Send
             </button>
           </div>
+          <Toaster />
         </div>
       </div>
     </div>
