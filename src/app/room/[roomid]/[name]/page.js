@@ -140,13 +140,15 @@ function page({ params }) {
         NAME - {name}
       </div>
       <div className="w-full flex justify-around bg-blue-500 pt-3">
-        <canvas
-          ref={canvasRef}
-          height={500}
-          width={500}
-          className="bg-white border border-black rounded-lg"
-          onMouseDown={onMouseDown}
-        />
+        <div className="overflow-auto max-w-full max-h-screen">
+          <canvas
+            ref={canvasRef}
+            height={500}
+            width={500}
+            className="bg-white border border-black rounded-lg"
+            onMouseDown={onMouseDown}
+          />
+        </div>
       </div>
       <div className="w-full flex justify-center bg-blue-500">
         <input
