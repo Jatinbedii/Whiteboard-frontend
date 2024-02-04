@@ -140,77 +140,82 @@ function page({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-blue-500">
-      <div className="w-full text-center bg-blue-500 text-3xl md:text-4xl">
-        ROOM - {room}
-      </div>
-      <div className="w-full text-center bg-blue-500 text-1xl md:text-2xl">
-        NAME - {name}
-      </div>
-      <div className="w-full flex justify-around bg-blue-500 pt-3">
-        <div className="overflow-auto max-w-full max-h-screen">
-          <canvas
-            ref={canvasRef}
-            height={500}
-            width={500}
-            className="bg-white border border-black rounded-lg"
-            onMouseDown={onMouseDown}
-          />
+    <>
+      <Toaster />
+      <div className="min-h-screen bg-blue-500">
+        <div className="w-full text-center bg-blue-500 text-3xl md:text-4xl">
+          ROOM - {room}
         </div>
-      </div>
-      <div className="w-full flex justify-center bg-blue-500">
-        <input
-          className="m-2"
-          type="color"
-          id="colorpicker"
-          onChange={(e) => setcolor(e.target.value)}
-        />
-        <button
-          className="m-2 bg-blue-950 text-white rounded-md p-1"
-          onClick={clearhandler}
-        >
-          Clear
-        </button>
-      </div>
-      <div className="w-full flex justify-center bg-blue-500">
-        <div className="bg-blue-700 rounded-lg p-1">
-          <div className="max-h-[200px] overflow-y-auto" ref={chatContainerRef}>
-            {chat.map((data) => {
-              if (data.by) {
-                return (
-                  <div className="text-white">
-                    <span className="text-white font-bold">
-                      {data.by + " : "}
-                    </span>
-                    {data.message}
-                  </div>
-                );
-              } else {
-                return (
-                  <div className="w-full bg-blue-900 text-white rounded-md pl-1 mt-1 mb-1">
-                    {data.message}
-                  </div>
-                );
-              }
-            })}
-          </div>
-          <div>
-            <input
-              value={chatinput}
-              onChange={(e) => setchatinput(e.target.value)}
-              className="rounded-lg m-1 p-1"
+        <div className="w-full text-center bg-blue-500 text-1xl md:text-2xl">
+          NAME - {name}
+        </div>
+        <div className="w-full flex justify-around bg-blue-500 pt-3">
+          <div className="overflow-auto max-w-full max-h-screen">
+            <canvas
+              ref={canvasRef}
+              height={500}
+              width={500}
+              className="bg-white border border-black rounded-lg"
+              onMouseDown={onMouseDown}
             />
-            <button
-              className="p-1 m-1 text-white bg-blue-950 rounded-lg"
-              onClick={sendmessagehandler}
-            >
-              Send
-            </button>
           </div>
-          <Toaster />
+        </div>
+        <div className="w-full flex justify-center bg-blue-500">
+          <input
+            className="m-2"
+            type="color"
+            id="colorpicker"
+            onChange={(e) => setcolor(e.target.value)}
+          />
+          <button
+            className="m-2 bg-blue-950 text-white rounded-md p-1"
+            onClick={clearhandler}
+          >
+            Clear
+          </button>
+        </div>
+        <div className="w-full flex justify-center bg-blue-500">
+          <div className="bg-blue-700 rounded-lg p-1">
+            <div
+              className="max-h-[200px] overflow-y-auto"
+              ref={chatContainerRef}
+            >
+              {chat.map((data) => {
+                if (data.by) {
+                  return (
+                    <div className="text-white">
+                      <span className="text-white font-bold">
+                        {data.by + " : "}
+                      </span>
+                      {data.message}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="w-full bg-blue-900 text-white rounded-md pl-1 mt-1 mb-1">
+                      {data.message}
+                    </div>
+                  );
+                }
+              })}
+            </div>
+            <div>
+              <input
+                value={chatinput}
+                onChange={(e) => setchatinput(e.target.value)}
+                className="rounded-lg m-1 p-1"
+              />
+              <button
+                className="p-1 m-1 text-white bg-blue-950 rounded-lg"
+                onClick={sendmessagehandler}
+              >
+                Send
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
