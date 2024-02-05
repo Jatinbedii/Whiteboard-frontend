@@ -1,4 +1,5 @@
 "use client";
+import { RiRadioButtonLine } from "react-icons/ri";
 import useDraw from "@/hooks/useDraw";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,7 +19,7 @@ function page({ params }) {
   const [colorforline, setcolor] = useState("#000");
   const [socketstate, setsocketstate] = useState();
   const [chat, setchat] = useState([]);
-  const [count, setcount] = useState(0);
+  const [count, setcount] = useState(1);
   function sendmessagehandler(e) {
     e.preventDefault();
     setchat((prevchat) => [...prevchat, { message: chatinput, by: "You" }]);
@@ -167,7 +168,13 @@ function page({ params }) {
                 <IoPersonSharp />
                 {name}
               </div>
-              <div>{count}</div>
+              <div className="bg-blue-500 text-black mt-2 font-semibold rounded-full text-center p-1">
+                <div className="flex flex-row">
+                  <RiRadioButtonLine color="#90EE90" />
+                </div>
+
+                {count}
+              </div>
             </div>
           </div>
         </div>
