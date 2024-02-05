@@ -18,6 +18,7 @@ function page({ params }) {
   const [colorforline, setcolor] = useState("#000");
   const [socketstate, setsocketstate] = useState();
   const [chat, setchat] = useState([]);
+  const [count, setcount] = useState(0);
   function sendmessagehandler(e) {
     e.preventDefault();
     setchat((prevchat) => [...prevchat, { message: chatinput, by: "You" }]);
@@ -45,6 +46,9 @@ function page({ params }) {
     socket.emit("joinroom", { name, room });
     socket.on("message", ({ name, message }) => {
       setchat((prevchat) => [...prevchat, { by: name, message: message }]);
+    });
+    socket.on("usercount", ({ count }) => {
+      setcount(count);
     });
     socket.on("userjoined", (props) => {
       setchat((prevchat) => [
@@ -162,6 +166,7 @@ function page({ params }) {
                 <IoPersonSharp />
                 {name}
               </div>
+              <div>{count}</div>
             </div>
           </div>
         </div>
