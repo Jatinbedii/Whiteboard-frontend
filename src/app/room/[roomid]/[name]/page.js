@@ -48,7 +48,8 @@ function page({ params }) {
       setchat((prevchat) => [...prevchat, { by: name, message: message }]);
     });
     socket.on("usercount", ({ count }) => {
-      setcount(count);
+      const users = count;
+      setcount(users);
     });
     socket.on("userjoined", (props) => {
       setchat((prevchat) => [
