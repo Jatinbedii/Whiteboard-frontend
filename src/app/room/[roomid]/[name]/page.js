@@ -1,4 +1,5 @@
 "use client";
+import { LuClipboardPaste } from "react-icons/lu";
 import { RiRadioButtonLine } from "react-icons/ri";
 import useDraw from "@/hooks/useDraw";
 import { useToast } from "@/components/ui/use-toast";
@@ -20,6 +21,12 @@ function page({ params }) {
   const [socketstate, setsocketstate] = useState();
   const [chat, setchat] = useState([]);
   const [count, setcount] = useState(1);
+  async function copytoclipboard() {
+    await navigator.clipboard.writeText(
+      `${window.location.host}/joinroom/${room}`
+    );
+    console.log("text added");
+  }
   function sendmessagehandler(e) {
     e.preventDefault();
     setchat((prevchat) => [...prevchat, { message: chatinput, by: "You" }]);
@@ -174,6 +181,16 @@ function page({ params }) {
                 </div>
 
                 {count}
+              </div>
+
+              <div
+                onClick={copytoclipboard}
+                className="bg-blue-500 text-black mt-2 font-semibold rounded-full text-center p-1"
+              >
+                <div className="flex flex-row">
+                  <LuClipboardPaste />
+                </div>
+                Invite
               </div>
             </div>
           </div>
