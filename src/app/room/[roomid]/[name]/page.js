@@ -27,7 +27,11 @@ function page({ params }) {
     await navigator.clipboard.writeText(
       `${window.location.host}/joinroom/${room}`
     );
-    console.log("text added");
+    toast({
+      title: "Invitation Link Copied",
+      description:
+        "Invitation Link Added to ClipBoard. Share it to invite new users!",
+    });
   }
   function sendmessagehandler(e) {
     e.preventDefault();
