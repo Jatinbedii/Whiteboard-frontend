@@ -1,4 +1,5 @@
 "use client";
+import { ClipLoader } from "react-spinners";
 import { LuClipboardPaste } from "react-icons/lu";
 import { RiRadioButtonLine } from "react-icons/ri";
 import useDraw from "@/hooks/useDraw";
@@ -15,6 +16,7 @@ function page({ params }) {
   const chatContainerRef = useRef(null);
   const name = params.name;
   const room = params.roomid;
+  const [connected, setconnected] = useState(false);
   const { canvasRef, onMouseDown, clearBoard } = useDraw(drawline);
   const [chatinput, setchatinput] = useState();
   const [colorforline, setcolor] = useState("#000");
@@ -58,6 +60,7 @@ function page({ params }) {
     socket.on("usercount", ({ count }) => {
       const users = count;
       setcount(users);
+      setconnected(true);
     });
     socket.on("userjoined", (props) => {
       setchat((prevchat) => [
@@ -197,15 +200,24 @@ function page({ params }) {
         </div>
 
         <div className="w-full flex justify-around bg-blue-500 pt-3">
-          <div className="overflow-auto max-w-full max-h-screen p-1 bg-black rounded-lg">
-            <canvas
-              ref={canvasRef}
-              height={500}
-              width={500}
-              className="bg-white border border-black rounded-lg"
-              onMouseDown={onMouseDown}
-            />
-          </div>
+          {connected ? (
+            <div className="overflow-auto max-w-full max-h-screen p-1 bg-black rounded-lg">
+              <canvas
+                ref={canvasRef}
+                height={500}
+                width={500}
+                className="bg-white border border-black rounded-lg"
+                onMouseDown={onMouseDown}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 pt-5 pb-5">
+              <ClipLoader color={"#ffffff"} size={300} />
+              <div className=" text-white text-center font-bold">
+                Joining Room
+              </div>
+            </div>
+          )}
         </div>
         <div className="w-full flex justify-center bg-blue-500">
           <input
