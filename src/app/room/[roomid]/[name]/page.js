@@ -216,7 +216,10 @@ function page({ params }) {
             </div>
           ) : (
             <div className="flex flex-col gap-2 pt-5 pb-5">
-              <ClipLoader color={"#ffffff"} size={300} />
+              <div className="w-full text-center pt-10 pb-10">
+                {" "}
+                <ClipLoader color={"#ffffff"} size={60} />
+              </div>
               <div className=" text-white text-center font-bold">
                 Joining Room
               </div>
