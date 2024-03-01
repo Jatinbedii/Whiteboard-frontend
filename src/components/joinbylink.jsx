@@ -32,7 +32,7 @@ function Joinbylink({ room }) {
           <div className="w-full text-center">
             <input
               className="rounded-2xl max-w-[300px] text-center"
-              placeholder="Enter Room Name"
+              placeholder="Enter Your Name"
               value={name}
               onChange={(e) => setname(e.target.value)}
             />
